@@ -1,17 +1,19 @@
-﻿<div class="app-shell">
+<div class="app-shell">
   <header class="topbar">
-    <div class="brand">
-      <div class="brand-title">Market Lens</div>
-      <div class="brand-sub">Inter-server price explorer</div>
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="brand-title">Carnet de revente Dofus</div>
+        <div class="brand-sub">Suivi local des achats, crafts et ventes</div>
+      </div>
+      <nav class="nav">
+        <a routerLink="/operations/open" routerLinkActive="is-active">Ouvertes</a>
+        <a routerLink="/operations/sold" routerLinkActive="is-active">Vendues</a>
+        <a routerLink="/analytics" routerLinkActive="is-active">Analyse</a>
+        <a routerLink="/settings" routerLinkActive="is-active">Parametres</a>
+      </nav>
     </div>
-    <nav class="nav">
-      <a routerLink="/import" routerLinkActive="active">Import</a>
-      <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
-      <a routerLink="/opportunities" routerLinkActive="active">Opportunities</a>
-    </nav>
   </header>
   <main class="app-main">
     <router-outlet></router-outlet>
   </main>
 </div>
-

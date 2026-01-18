@@ -1,59 +1,63 @@
-# MonProjetAngular
+# Dofus Trade Ledger
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.1.
+Single-user, desktop-first Angular app to track Dofus buy or craft operations through resale, with local IndexedDB storage and no backend.
 
-## Development server
+## Stack
 
-To start a local development server, run:
+- Angular 21 (standalone components, signals, provideRouter)
+- NgRx SignalStore
+- Dexie (IndexedDB)
+- PrimeNG + Tailwind CSS
+- Chart.js
+- SheetJS (xlsx)
 
-```bash
-ng serve
-```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Run
 
 ```bash
-ng generate component component-name
+npm install
+npm run dev
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Build for production:
 
 ```bash
-ng generate --help
+npm run build
 ```
 
-## Building
+## Fee policy and rounding
 
-To build the project run:
+- Base HDV fee: 2%
+- If priceModified is true: +1% (total 3%)
+- Rounding strategy: `Math.floor(sellPrice * feeRate)` so fee is always an integer
 
-```bash
-ng build
-```
+## Import Excel (migration)
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+In Settings, use **Import Excel (.xlsx)**.
 
-## Running unit tests
+- Each sheet name becomes the server name.
+- Expected columns (case-insensitive, spaces ignored):
+  - `Date d'achat` -> boughtAt
+  - `Item vendu ?` -> status (Oui => SOLD, Non => OPEN)
+  - `Nom de l'item` -> itemName
+  - `Prix Achat` -> buyPrice
+  - `Prix Vente` -> sellPrice (only used when SOLD)
+  - `Notes` -> comment
+- For SOLD rows without a sale date in Excel, the app sets `soldAt = boughtAt`.
+- No deduplication: each Excel row becomes one operation.
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+## Backup JSON
 
-```bash
-ng test
-```
+- **Export JSON** creates a full backup (operations + servers).
+- **Import JSON** replaces the current DB (confirmation required).
+- **Export CSV** is available for quick exports.
 
-## Running end-to-end tests
+## GitHub Pages
 
-For end-to-end (e2e) testing, run:
+The workflow at `.github/workflows/deploy.yml` builds the Angular app and deploys `dist/mon-projet-angular/browser` to GitHub Pages.
 
-```bash
-ng e2e
-```
+## Next steps
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- [ ] Add your full server list in Settings
+- [ ] Import the historical Excel file
+- [ ] Review OPEN rows and add target sell prices when needed
+- [ ] Push to GitHub and enable Pages in repository settings

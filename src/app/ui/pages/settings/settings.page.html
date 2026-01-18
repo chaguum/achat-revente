@@ -1,0 +1,80 @@
+<section class="page">
+  <div class="page-head">
+    <div>
+      <h1 class="section-title">Parametres</h1>
+      <p class="page-sub">Gestion des serveurs et sauvegardes.</p>
+    </div>
+  </div>
+
+  <div class="page-card p-4">
+    <div class="section-title">Serveurs</div>
+    <p class="page-sub">Liste des serveurs disponibles pour la saisie.</p>
+
+    <div class="server-form">
+      <input
+        pInputText
+        type="text"
+        placeholder="Ajouter un serveur"
+        [ngModel]="newServerName()"
+        (ngModelChange)="newServerName.set($event)"
+      />
+      <button pButton type="button" label="Ajouter" icon="pi pi-plus" (click)="addServer()"></button>
+    </div>
+
+    <p-table [value]="store.servers()" [rows]="10">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Nom</th>
+          <th>Id</th>
+          <th>Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-row>
+        <tr>
+          <td>{{ row.name }}</td>
+          <td>{{ row.id }}</td>
+          <td>
+            <button
+              pButton
+              type="button"
+              icon="pi pi-trash"
+              class="p-button-text p-button-sm"
+              (click)="deleteServer(row.id)"
+            ></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <div class="page-card p-4">
+    <div class="section-title">Import / Export</div>
+    <p class="page-sub">Migration Excel et sauvegardes locales.</p>
+
+    <div class="actions-grid">
+      <button
+        pButton
+        type="button"
+        label="Charger les donnees par defaut"
+        icon="pi pi-upload"
+        class="p-button-outlined"
+        (click)="importDefaultDataset()"
+      ></button>
+      <button pButton type="button" label="Exporter JSON" icon="pi pi-download" (click)="exportJson()"></button>
+      <label class="file-action">
+        <input type="file" accept="application/json" (change)="importJsonFile($event)" />
+        <span>Importer JSON</span>
+      </label>
+      <button pButton type="button" label="Exporter CSV" icon="pi pi-file" class="p-button-outlined" (click)="exportCsv()"></button>
+      <label class="file-action">
+        <input type="file" accept=".xlsx" (change)="importExcelFile($event)" />
+        <span>Importer Excel (.xlsx)</span>
+      </label>
+    </div>
+
+    <div class="import-notes">
+      <div>Colonnes attendues : Date d'achat, Item vendu ?, Nom de l'item, Prix Achat, Prix Vente, Notes.</div>
+      <div>Le nom de l'onglet devient le serveur. Les ventes sans date utilisent la date d'achat.</div>
+    </div>
+  </div>
+</section>

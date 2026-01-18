@@ -1,0 +1,9 @@
+{
+  "servers": {
+    "angular-docs": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-fetch", "https://v21.angular.dev"],
+      "env": {}
+    }
+  }
+}

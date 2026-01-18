@@ -6,52 +6,52 @@ export const themePreset = {
     ...(Aura as any).semantic,
     colorScheme: {
       ...(Aura as any).semantic.colorScheme,
-      light: {
-        ...(Aura as any).semantic.colorScheme.light,
+      dark: {
+        ...(Aura as any).semantic.colorScheme.dark,
         text: {
-          color: '{surface.900}',
-          mutedColor: '{surface.600}',
-          hoverColor: '{surface.900}',
-          hoverMutedColor: '{surface.700}'
+          color: '#f4f2ee',
+          mutedColor: '#a2a8b3',
+          hoverColor: '#ffffff',
+          hoverMutedColor: '#c2c8d2'
         },
         surface: {
-          0: '#ffffff',
-          50: '#f9f6f0',
-          100: '#f1ece4',
-          200: '#e6ded2',
-          300: '#d6cab9',
-          400: '#b9a991',
-          500: '#9c8a73',
-          600: '#7a6b59',
-          700: '#594e43',
-          800: '#3f372f',
-          900: '#2c2621',
-          950: '#1b1714'
+          0: '#0c0f14',
+          50: '#111722',
+          100: '#161d29',
+          200: '#1d2633',
+          300: '#273243',
+          400: '#344156',
+          500: '#46556d',
+          600: '#617088',
+          700: '#7a879e',
+          800: '#a0aab7',
+          900: '#d7dde6',
+          950: '#f2f4f8'
         },
         primary: {
-          color: '#1a8f78',
-          contrastColor: '#ffffff',
-          hoverColor: '#11715f',
-          activeColor: '#0c5a4b'
+          color: '#ff7d3b',
+          contrastColor: '#0b0c10',
+          hoverColor: '#ff965c',
+          activeColor: '#e65f25'
         },
         highlight: {
-          background: '#e6f4f0',
-          focusBackground: '#d5efe8',
-          color: '#0f6f5d',
-          focusColor: '#0c5a4b'
+          background: 'rgba(255, 125, 59, 0.18)',
+          focusBackground: 'rgba(255, 125, 59, 0.28)',
+          color: '#ffb381',
+          focusColor: '#ffd0b1'
         },
         content: {
-          background: '#ffffff',
-          borderColor: '#e2ddd3',
+          background: '#141922',
+          borderColor: 'rgba(255, 255, 255, 0.12)',
           color: '{text.color}',
           hoverColor: '{text.hover.color}',
-          hoverBackground: '#f4efe6'
+          hoverBackground: '#1c2431'
         },
         formField: {
-          background: '#ffffff',
-          borderColor: '#d9d3c8',
+          background: '#11161e',
+          borderColor: 'rgba(255, 255, 255, 0.14)',
           color: '{text.color}',
-          placeholderColor: '#8a7f72'
+          placeholderColor: '#7c8594'
         }
       }
     }

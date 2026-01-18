@@ -1,0 +1,84 @@
+<section class="page">
+  <div class="page-head">
+    <div>
+      <h1 class="section-title">Analyse</h1>
+      <p class="page-sub">Vue globale sur la performance des ventes.</p>
+    </div>
+    <div class="page-actions">
+      <button pButton type="button" label="Actualiser" icon="pi pi-refresh" class="p-button-outlined" (click)="store.load()"></button>
+    </div>
+  </div>
+
+  <div class="kpi-grid">
+    <app-kpi-card tone="ember" title="Ventes totales" [value]="store.snapshot().totalSold"></app-kpi-card>
+    <app-kpi-card
+      tone="mint"
+      title="Duree moyenne"
+      [value]="(store.snapshot().averageDaysToSell | number: '1.0-1') + ' j'"
+    ></app-kpi-card>
+    <app-kpi-card
+      title="Meilleure marge"
+      [value]="bestMargin() ? ((bestMargin()!.margin | percent: '1.0-1') || '-') : '-'"
+      [hint]="bestMargin() ? bestMargin()!.itemName : ''"
+    ></app-kpi-card>
+    <app-kpi-card
+      tone="sky"
+      title="Meilleur profit net"
+      [value]="bestProfit() ? (bestProfit()!.netProfit | kamas) : '-'"
+      [hint]="bestProfit() ? bestProfit()!.itemName : ''"
+    ></app-kpi-card>
+    <app-kpi-card
+      title="Item le plus vendu"
+      [value]="topSold() ? topSold()!.count : '-'"
+      [hint]="topSold() ? topSold()!.itemName : ''"
+    ></app-kpi-card>
+  </div>
+
+  <div class="page-card p-4">
+    <div class="chart-head">
+      <div>
+        <div class="section-title">Profit cumule</div>
+        <p class="page-sub">Profit net mensuel apres taxes.</p>
+      </div>
+    </div>
+    <app-profit-chart [series]="store.snapshot().profitSeries"></app-profit-chart>
+  </div>
+
+  <div class="tables-grid">
+    <div class="page-card p-4">
+      <div class="section-title">Items les plus vendus</div>
+      <p-table [value]="store.snapshot().mostSold" [rows]="5">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Item</th>
+            <th>Ventes</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+          <tr>
+            <td>{{ row.itemName }}</td>
+            <td>{{ row.count }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+
+    <div class="page-card p-4">
+      <div class="section-title">Ventes les plus rapides</div>
+      <p-table [value]="store.snapshot().fastestToSell" [rows]="5">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Item</th>
+            <th>Jours moyens</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+          <tr>
+            <td>{{ row.itemName }}</td>
+            <td>{{ row.avgDaysToSell | number: '1.0-1' }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,66 @@
+.page {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.page-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1.5rem;
+}
+
+.page-sub {
+  margin: 0.25rem 0 0;
+  color: var(--ash);
+}
+
+.server-form {
+  display: grid;
+  grid-template-columns: minmax(200px, 1fr) auto;
+  gap: 0.75rem;
+  margin: 1rem 0;
+}
+
+.actions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.file-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  color: var(--ink);
+  font-weight: 600;
+  cursor: pointer;
+  background: rgba(17, 22, 30, 0.8);
+}
+
+.file-action input {
+  display: none;
+}
+
+.import-notes {
+  margin-top: 1rem;
+  color: var(--ash);
+  font-size: 0.9rem;
+  display: grid;
+  gap: 0.35rem;
+}
+
+@media (max-width: 840px) {
+  .page-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .server-form {
+    grid-template-columns: 1fr;
+  }
+}

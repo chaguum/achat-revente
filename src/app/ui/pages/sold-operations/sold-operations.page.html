@@ -1,0 +1,287 @@
+<section class="page">
+  <div class="page-head">
+    <div>
+      <h1 class="section-title">Operations vendues</h1>
+      <p class="page-sub">Historique des ventes avec correction des prix.</p>
+    </div>
+    <div class="page-actions">
+      <button pButton type="button" label="Actualiser" icon="pi pi-refresh" class="p-button-outlined" (click)="store.load()"></button>
+    </div>
+  </div>
+
+  <div class="page-card p-4">
+    <p-table
+      [value]="soldRows()"
+      [paginator]="true"
+      [rows]="12"
+      [rowsPerPageOptions]="[12, 24, 50]"
+      sortMode="multiple"
+      dataKey="operation.id"
+      responsiveLayout="scroll"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="operation.boughtAt">
+            Date achat
+            <p-sortIcon field="operation.boughtAt"></p-sortIcon>
+            <p-columnFilter
+              field="operation.boughtAt"
+              type="date"
+              display="menu"
+              [showOperator]="true"
+              [showAddButton]="true"
+            >
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <p-datepicker
+                  [ngModel]="value"
+                  (ngModelChange)="filter($event)"
+                  [showIcon]="true"
+                ></p-datepicker>
+              </ng-template>
+            </p-columnFilter>
+          </th>
+          <th pSortableColumn="operation.soldAt">
+            Date vente
+            <p-sortIcon field="operation.soldAt"></p-sortIcon>
+            <p-columnFilter
+              field="operation.soldAt"
+              type="date"
+              display="menu"
+              [showOperator]="true"
+              [showAddButton]="true"
+            >
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <p-datepicker
+                  [ngModel]="value"
+                  (ngModelChange)="filter($event)"
+                  [showIcon]="true"
+                ></p-datepicker>
+              </ng-template>
+            </p-columnFilter>
+          </th>
+          <th pSortableColumn="operation.server">
+            Serveur
+            <p-sortIcon field="operation.server"></p-sortIcon>
+            <p-columnFilter
+              field="operation.server"
+              matchMode="in"
+              display="menu"
+              [showMatchModes]="false"
+              [showOperator]="true"
+              [showAddButton]="true"
+            >
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <p-multiselect
+                  [options]="serverFilterOptions()"
+                  [ngModel]="value"
+                  (ngModelChange)="filter($event)"
+                  optionLabel="label"
+                  optionValue="value"
+                  placeholder="Tous"
+                  [filter]="true"
+                ></p-multiselect>
+              </ng-template>
+            </p-columnFilter>
+          </th>
+          <th pSortableColumn="operation.itemName">
+            Item
+            <p-sortIcon field="operation.itemName"></p-sortIcon>
+            <p-columnFilter
+              field="operation.itemName"
+              matchMode="in"
+              display="menu"
+              [showMatchModes]="false"
+              [showOperator]="true"
+              [showAddButton]="true"
+            >
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <p-multiselect
+                  [options]="itemFilterOptions()"
+                  [ngModel]="value"
+                  (ngModelChange)="filter($event)"
+                  optionLabel="label"
+                  optionValue="value"
+                  placeholder="Tous"
+                  [filter]="true"
+                ></p-multiselect>
+              </ng-template>
+            </p-columnFilter>
+          </th>
+          <th pSortableColumn="operation.acquisitionType">
+            Type
+            <p-sortIcon field="operation.acquisitionType"></p-sortIcon>
+            <p-columnFilter
+              field="operation.acquisitionType"
+              matchMode="in"
+              display="menu"
+              [showMatchModes]="false"
+              [showOperator]="true"
+              [showAddButton]="true"
+            >
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <p-multiselect
+                  [options]="typeFilterOptions()"
+                  [ngModel]="value"
+                  (ngModelChange)="filter($event)"
+                  optionLabel="label"
+                  optionValue="value"
+                  placeholder="Tous"
+                ></p-multiselect>
+              </ng-template>
+            </p-columnFilter>
+          </th>
+          <th pSortableColumn="operation.buyPrice">
+            Prix achat
+            <p-sortIcon field="operation.buyPrice"></p-sortIcon>
+            <p-columnFilter
+              field="operation.buyPrice"
+              matchMode="in"
+              display="menu"
+              [showMatchModes]="false"
+              [showOperator]="true"
+              [showAddButton]="true"
+            >
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <p-multiselect
+                  [options]="buyPriceFilterOptions()"
+                  [ngModel]="value"
+                  (ngModelChange)="filter($event)"
+                  optionLabel="label"
+                  optionValue="value"
+                  placeholder="Tous"
+                  [filter]="true"
+                ></p-multiselect>
+              </ng-template>
+            </p-columnFilter>
+          </th>
+          <th pSortableColumn="operation.sellPrice">
+            Prix vente
+            <p-sortIcon field="operation.sellPrice"></p-sortIcon>
+            <p-columnFilter
+              field="operation.sellPrice"
+              matchMode="in"
+              display="menu"
+              [showMatchModes]="false"
+              [showOperator]="true"
+              [showAddButton]="true"
+            >
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <p-multiselect
+                  [options]="sellPriceFilterOptions()"
+                  [ngModel]="value"
+                  (ngModelChange)="filter($event)"
+                  optionLabel="label"
+                  optionValue="value"
+                  placeholder="Tous"
+                  [filter]="true"
+                ></p-multiselect>
+              </ng-template>
+            </p-columnFilter>
+          </th>
+          <th>Taxe</th>
+          <th>Profit net</th>
+          <th>Marge</th>
+          <th>Duree</th>
+          <th>Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-row>
+        <tr>
+          <td>{{ row.operation.boughtAt | date: 'dd/MM/yyyy' }}</td>
+          <td>{{ row.operation.soldAt ? (row.operation.soldAt | date: 'dd/MM/yyyy') : '-' }}</td>
+          <td>{{ row.operation.server }}</td>
+          <td>{{ row.operation.itemName }}</td>
+          <td>
+            <p-tag
+              [value]="formatAcquisitionLabel(row.operation.acquisitionType)"
+              [severity]="row.operation.acquisitionType === 'BUY' ? 'info' : 'warn'"
+            ></p-tag>
+          </td>
+          <td>{{ row.operation.buyPrice | kamas }}</td>
+          <td>{{ row.operation.sellPrice | kamas }}</td>
+          <td>{{ row.metrics.saleFee | kamas }}</td>
+          <td>{{ row.metrics.netProfit | kamas }}</td>
+          <td>{{ row.metrics.margin !== null ? (row.metrics.margin | percent: '1.0-1') : '-' }}</td>
+          <td>{{ row.metrics.daysOnMarket | number: '1.0-1' }}</td>
+          <td class="actions-cell">
+            <button pButton type="button" icon="pi pi-pencil" class="p-button-text p-button-sm" (click)="openEdit(row.operation)"></button>
+            <button pButton type="button" icon="pi pi-trash" class="p-button-text p-button-sm" (click)="deleteOperation(row.operation)"></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</section>
+
+<p-dialog
+  header="Modifier la vente"
+  [modal]="true"
+  [style]="{ width: 'min(520px, 92vw)' }"
+  [visible]="editDialogOpen()"
+  (onHide)="closeEdit()"
+>
+  <ng-container *ngIf="selectedOperation() as operation">
+    <div class="dialog-summary">
+      <div>
+        <div class="summary-title">{{ operation.itemName }}</div>
+        <div class="summary-sub">{{ operation.server }} ? {{ formatAcquisitionLabel(operation.acquisitionType) }}</div>
+      </div>
+    </div>
+    <div class="dialog-grid">
+      <div class="field">
+        <label>Prix achat</label>
+        <p-inputNumber
+          [min]="0"
+          [ngModel]="editDraft().buyPrice"
+          (ngModelChange)="updateEditDraft({ buyPrice: $event })"
+        ></p-inputNumber>
+      </div>
+      <div class="field">
+        <label>Prix vente</label>
+        <p-inputNumber
+          [min]="0"
+          [ngModel]="editDraft().sellPrice"
+          (ngModelChange)="updateEditDraft({ sellPrice: $event })"
+        ></p-inputNumber>
+      </div>
+      <div class="field">
+        <label>Date achat</label>
+        <p-datepicker
+          [showIcon]="true"
+          [ngModel]="editDraft().boughtAt"
+          (ngModelChange)="updateEditDraft({ boughtAt: $event })"
+        ></p-datepicker>
+      </div>
+      <div class="field">
+        <label>Date vente</label>
+        <p-datepicker
+          [showIcon]="true"
+          [ngModel]="editDraft().soldAt"
+          (ngModelChange)="updateEditDraft({ soldAt: $event })"
+        ></p-datepicker>
+      </div>
+      <div class="field">
+        <label>Commentaire</label>
+        <input
+          pInputText
+          type="text"
+          [ngModel]="editDraft().comment"
+          (ngModelChange)="updateEditDraft({ comment: $event })"
+        />
+      </div>
+      <div class="field checkbox">
+        <p-checkbox
+          [binary]="true"
+          [ngModel]="editDraft().priceModified"
+          (ngModelChange)="updateEditDraft({ priceModified: $event })"
+        ></p-checkbox>
+        <label>Prix modifie</label>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template pTemplate="footer">
+    <button pButton type="button" label="Annuler" class="p-button-text" (click)="closeEdit()"></button>
+    <button pButton type="button" label="Enregistrer" [disabled]="!canSaveEdit()" (click)="saveEdit()"></button>
+  </ng-template>
+</p-dialog>

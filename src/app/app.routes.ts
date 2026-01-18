@@ -1,13 +1,38 @@
-﻿import { Routes } from '@angular/router';
-import { DashboardPageComponent } from './ui/pages/dashboard/dashboard.page';
-import { ImportPageComponent } from './ui/pages/import/import.page';
-import { OpportunitiesPageComponent } from './ui/pages/opportunities/opportunities.page';
+import { Routes } from '@angular/router';
 
 export const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: 'import' },
-  { path: 'import', component: ImportPageComponent, title: 'Import' },
-  { path: 'dashboard', component: DashboardPageComponent, title: 'Dashboard' },
-  { path: 'opportunities', component: OpportunitiesPageComponent, title: 'Opportunities' },
-  { path: '**', redirectTo: 'import' }
+  { path: '', pathMatch: 'full', redirectTo: 'operations/open' },
+  {
+    path: 'operations/open',
+    loadComponent: () =>
+      import('./ui/pages/open-operations/open-operations.page').then(
+        (module) => module.OpenOperationsPageComponent
+      ),
+    title: 'Operations ouvertes'
+  },
+  {
+    path: 'operations/sold',
+    loadComponent: () =>
+      import('./ui/pages/sold-operations/sold-operations.page').then(
+        (module) => module.SoldOperationsPageComponent
+      ),
+    title: 'Operations vendues'
+  },
+  {
+    path: 'analytics',
+    loadComponent: () =>
+      import('./ui/pages/analytics/analytics.page').then(
+        (module) => module.AnalyticsPageComponent
+      ),
+    title: 'Analyse'
+  },
+  {
+    path: 'settings',
+    loadComponent: () =>
+      import('./ui/pages/settings/settings.page').then(
+        (module) => module.SettingsPageComponent
+      ),
+    title: 'Parametres'
+  },
+  { path: '**', redirectTo: 'operations/open' }
 ];
-
