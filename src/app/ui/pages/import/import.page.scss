@@ -1,0 +1,41 @@
+﻿.import-page .hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.hero-content {
+  max-width: 520px;
+}
+
+.hero-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.status-row {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.sheet-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.sheet-meta {
+  margin-top: 0.75rem;
+}
+
+@media (max-width: 768px) {
+  .import-page .hero {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+

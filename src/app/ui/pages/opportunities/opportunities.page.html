@@ -1,0 +1,27 @@
+﻿<div class="page opportunities-page">
+  <section class="surface-card header">
+    <div>
+      <h1 class="section-title">Opportunites</h1>
+      <p class="muted">Comparaison source vs cible basee sur la selection courante.</p>
+    </div>
+    <button
+      pButton
+      icon="pi pi-download"
+      label="Export CSV"
+      class="p-button-secondary"
+      (click)="exportCsv()"
+      [disabled]="analysisStore.opportunities().length === 0"
+    ></button>
+  </section>
+
+  <p-message
+    *ngIf="!importStore.hasRows()"
+    severity="warn"
+    text="No data loaded yet. Import a sheet first."
+  ></p-message>
+
+  <app-opportunities-table
+    *ngIf="importStore.hasRows()"
+    [opportunities]="analysisStore.opportunities()"
+  ></app-opportunities-table>
+</div>

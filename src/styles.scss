@@ -1,1 +1,141 @@
-/* You can add global styles to this file, and also import other style files */
+﻿@import "primeicons/primeicons.css";
+@import "primeflex/primeflex.css";
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+
+:root {
+  color-scheme: light;
+  --font-display: 'Space Grotesk', 'Segoe UI', sans-serif;
+  --font-body: 'IBM Plex Sans', 'Segoe UI', sans-serif;
+  --bg: #f7f3ec;
+  --bg-strong: #e9efe7;
+  --surface: #ffffff;
+  --surface-soft: #f6f2ea;
+  --text-strong: #1e242a;
+  --text-muted: #5d6772;
+  --accent: #1a8f78;
+  --accent-strong: #0f6f5d;
+  --shadow: 0 20px 45px rgba(25, 35, 45, 0.08);
+
+  --p-primary-color: var(--accent);
+  --p-primary-contrast-color: #ffffff;
+  --p-text-color: var(--text-strong);
+  --p-text-muted-color: var(--text-muted);
+  --p-surface-0: #ffffff;
+  --p-surface-50: #f8f5f0;
+  --p-surface-100: #f0ebe4;
+  --p-surface-200: #e5ded4;
+  --p-surface-300: #d2c8bc;
+  --p-surface-700: #4b4f55;
+  --p-surface-800: #2f3439;
+  --p-surface-900: #1c2228;
+  --p-content-background: #ffffff;
+  --p-content-border-color: #e2ddd3;
+  --p-highlight-background: #e6f4f0;
+  --p-highlight-color: #0f6f5d;
+  --p-form-field-background: #ffffff;
+  --p-form-field-border-color: #d9d3c8;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font-body);
+  color: var(--text-strong);
+  background: linear-gradient(120deg, var(--bg), var(--bg-strong));
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: -20% -10% auto auto;
+  width: 55vmax;
+  height: 55vmax;
+  background: radial-gradient(circle, rgba(26, 143, 120, 0.2), transparent 60%);
+  filter: blur(20px);
+  z-index: -1;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: auto auto -25% -10%;
+  width: 60vmax;
+  height: 60vmax;
+  background: radial-gradient(circle, rgba(255, 196, 125, 0.2), transparent 65%);
+  filter: blur(30px);
+  z-index: -1;
+}
+
+a {
+  color: inherit;
+}
+
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-main {
+  flex: 1;
+  padding: 1.5rem clamp(1.25rem, 2vw, 2.5rem) 3rem;
+  max-width: 1300px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.page {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.surface-card {
+  background: var(--surface);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  border: 1px solid rgba(31, 36, 41, 0.08);
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.75rem 0;
+}
+
+.muted {
+  color: var(--text-muted);
+}
+
+.p-component {
+  font-family: var(--font-body);
+}
+
+.p-inputtext,
+.p-inputnumber-input,
+.p-select,
+.p-multiselect,
+.p-select .p-select-label,
+.p-multiselect .p-multiselect-label {
+  background: #ffffff;
+  color: var(--text-strong);
+  border-color: #e2ddd3;
+}
+
+.p-card,
+.p-datatable,
+.p-datatable .p-datatable-header {
+  background: #ffffff;
+  color: var(--text-strong);
+}
+
+@media (max-width: 768px) {
+  .app-main {
+    padding: 1.25rem 1rem 2rem;
+  }
+}

@@ -1,0 +1,55 @@
+﻿<div class="controls-card">
+  <div class="controls-header">
+    <div>
+      <h2 class="section-title">Tableau des prix</h2>
+      <p class="muted">Choisis les serveurs visibles et compare une source avec une cible.</p>
+    </div>
+    <button
+      pButton
+      type="button"
+      class="p-button-text"
+      icon="pi pi-refresh"
+      label="Swap"
+      (click)="filtersStore.swapServers()"
+    ></button>
+  </div>
+
+  <div class="controls-grid">
+    <div class="field">
+      <label>Colonnes affichees</label>
+      <p-multiSelect
+        [options]="serverOptions()"
+        [ngModel]="filtersStore.selectedServers()"
+        (onChange)="filtersStore.setSelectedServers($event.value ?? [])"
+        optionLabel="label"
+        optionValue="value"
+        defaultLabel="Serveurs"
+        display="chip"
+      ></p-multiSelect>
+    </div>
+
+    <div class="field">
+      <label>Serveur source</label>
+      <p-select
+        [options]="serverOptions()"
+        [ngModel]="filtersStore.sourceServer()"
+        (onChange)="filtersStore.setSourceServer($event.value ?? null)"
+        placeholder="Source"
+        optionLabel="label"
+        optionValue="value"
+      ></p-select>
+    </div>
+
+    <div class="field">
+      <label>Serveur cible</label>
+      <p-select
+        [options]="serverOptions()"
+        [ngModel]="filtersStore.targetServer()"
+        (onChange)="filtersStore.setTargetServer($event.value ?? null)"
+        placeholder="Cible"
+        optionLabel="label"
+        optionValue="value"
+      ></p-select>
+    </div>
+  </div>
+</div>

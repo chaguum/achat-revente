@@ -1,0 +1,21 @@
+﻿<div class="page dashboard-page">
+  <div class="surface-card">
+    <app-filter-panel></app-filter-panel>
+  </div>
+
+  <p-message
+    *ngIf="!importStore.hasRows()"
+    severity="warn"
+    text="No data loaded yet. Import a sheet first."
+  ></p-message>
+
+  <div *ngIf="importStore.hasRows()" class="surface-card">
+    <h2 class="section-title">Tableau des prix</h2>
+    <app-price-table
+      [rows]="analysisStore.filteredRows()"
+      [servers]="analysisStore.visibleServers()"
+      [sourceServer]="filtersStore.sourceServer()"
+      [targetServer]="filtersStore.targetServer()"
+    ></app-price-table>
+  </div>
+</div>

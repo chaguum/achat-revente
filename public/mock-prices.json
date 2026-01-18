@@ -1,0 +1,73 @@
+﻿{
+  "sheets": [
+    {
+      "sheetName": "Prices_Ressource",
+      "servers": ["Orukam", "Tylezia", "Imagiro"],
+      "rows": [
+        {
+          "itemName": "Bois de frene",
+          "pricesByServer": {
+            "Orukam": 120,
+            "Tylezia": 95,
+            "Imagiro": 140
+          }
+        },
+        {
+          "itemName": "Fer",
+          "pricesByServer": {
+            "Orukam": 220,
+            "Tylezia": 260,
+            "Imagiro": 190
+          }
+        },
+        {
+          "itemName": "Lin",
+          "pricesByServer": {
+            "Orukam": 70,
+            "Tylezia": null,
+            "Imagiro": 110
+          }
+        },
+        {
+          "itemName": "Ble",
+          "pricesByServer": {
+            "Orukam": 35,
+            "Tylezia": 40,
+            "Imagiro": 32
+          }
+        }
+      ]
+    },
+    {
+      "sheetName": "Prices_Equipement",
+      "servers": ["Orukam", "Tylezia", "Imagiro"],
+      "rows": [
+        {
+          "itemName": "Bottes du novice",
+          "pricesByServer": {
+            "Orukam": 1200,
+            "Tylezia": 980,
+            "Imagiro": 1350
+          }
+        },
+        {
+          "itemName": "Anneau du debutant",
+          "pricesByServer": {
+            "Orukam": 800,
+            "Tylezia": 760,
+            "Imagiro": 940
+          }
+        },
+        {
+          "itemName": "Amulette de voyage",
+          "pricesByServer": {
+            "Orukam": 2500,
+            "Tylezia": null,
+            "Imagiro": 2150
+          }
+        }
+      ]
+    }
+  ]
+}
+

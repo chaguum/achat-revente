@@ -1,0 +1,72 @@
+﻿<div class="page import-page">
+  <section class="surface-card hero">
+    <div class="hero-content">
+      <h1 class="section-title">Import prices</h1>
+      <p class="muted">
+        Auto-load the latest Excel output from the market sniffer, or upload a file
+        manually.
+      </p>
+      <div class="status-row">
+        <p-tag
+          [severity]="importStore.status() === 'ready' ? 'success' : (importStore.status() === 'error' ? 'danger' : 'info')"
+          [value]="importStore.status()"
+        ></p-tag>
+        <p-tag
+          *ngIf="importStore.source()"
+          severity="info"
+          [value]="importStore.source() ?? ''"
+        ></p-tag>
+      </div>
+    </div>
+    <div class="hero-actions">
+      <button
+        pButton
+        label="Load local file"
+        icon="pi pi-sync"
+        class="p-button-secondary"
+        (click)="loadAuto()"
+        [disabled]="!autoLoadUrl || importStore.status() === 'loading'"
+      ></button>
+      <p-fileUpload
+        mode="basic"
+        chooseLabel="Upload Excel"
+        accept=".xlsx"
+        [customUpload]="true"
+        [auto]="true"
+        (uploadHandler)="handleUpload($event)"
+      ></p-fileUpload>
+    </div>
+  </section>
+
+  <section class="surface-card">
+    <h2 class="section-title">Sheets</h2>
+    <div class="sheet-row">
+      <p-select
+        [options]="sheetOptions()"
+        [placeholder]="'Select a sheet'"
+        [ngModel]="importStore.selectedSheet()"
+        (onChange)="onSheetChange($event.value)"
+        [disabled]="!importStore.sheetNames().length"
+        optionLabel="label"
+        optionValue="value"
+      ></p-select>
+      <button
+        pButton
+        type="button"
+        routerLink="/dashboard"
+        label="Open dashboard"
+        icon="pi pi-arrow-right"
+        [disabled]="!importStore.hasRows()"
+      ></button>
+    </div>
+    <div class="sheet-meta muted">
+      Rows: {{ importStore.rows().length }} | Servers: {{ importStore.servers().length }}
+    </div>
+    <p-message
+      *ngIf="importStore.error()"
+      severity="error"
+      [text]="importStore.error() ?? ''"
+    ></p-message>
+  </section>
+</div>
+

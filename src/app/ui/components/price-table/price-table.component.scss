@@ -1,0 +1,64 @@
+﻿.price-table {
+  background: #ffffff;
+  color: var(--text-strong);
+}
+
+.price-table .item {
+  font-weight: 600;
+}
+
+.price-table .p-datatable-wrapper,
+.price-table .p-datatable-table,
+.price-table .p-datatable-thead,
+.price-table .p-datatable-tbody,
+.price-table .p-datatable-tfoot {
+  background: #ffffff;
+}
+
+.price-table .p-datatable-thead > tr > th {
+  background: var(--surface-soft);
+  color: var(--text-strong);
+  border-bottom: 1px solid rgba(31, 36, 41, 0.12);
+  font-weight: 600;
+}
+
+.price-table .p-datatable-tbody > tr > td {
+  border-bottom: 1px solid rgba(31, 36, 41, 0.08);
+}
+
+.price-table .p-datatable-tbody > tr:nth-child(even) > td {
+  background: rgba(245, 242, 235, 0.6);
+}
+
+.price-table .source-cell {
+  background: rgba(21, 150, 125, 0.12);
+  font-weight: 600;
+}
+
+.price-table .target-cell {
+  background: rgba(255, 191, 105, 0.18);
+  font-weight: 600;
+}
+
+.price-table .source-col,
+.price-table .target-col,
+.price-table .net-cell,
+.price-table .profit-cell {
+  white-space: nowrap;
+}
+
+.delta-pos {
+  color: #0f6f5d;
+  font-weight: 600;
+}
+
+.delta-neg {
+  color: #b94a2b;
+  font-weight: 600;
+}
+
+.server-label {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}

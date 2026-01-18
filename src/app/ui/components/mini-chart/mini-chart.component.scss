@@ -1,0 +1,8 @@
+﻿.chart-card {
+  min-height: 320px;
+}
+
+:host ::ng-deep canvas {
+  max-height: 240px;
+}
+

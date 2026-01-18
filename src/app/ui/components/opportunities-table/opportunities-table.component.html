@@ -1,0 +1,36 @@
+﻿<p-table
+  [value]="opportunities"
+  [paginator]="true"
+  [rows]="50"
+  sortField="netSpread"
+  [sortOrder]="-1"
+  [tableStyle]="{ 'min-width': '900px' }"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <th pSortableColumn="itemName">Item <p-sortIcon field="itemName"></p-sortIcon></th>
+      <th>Source</th>
+      <th>Cible</th>
+      <th pSortableColumn="sourcePrice">Prix source <p-sortIcon field="sourcePrice"></p-sortIcon></th>
+      <th pSortableColumn="targetPrice">Prix cible <p-sortIcon field="targetPrice"></p-sortIcon></th>
+      <th pSortableColumn="netSpread">Net <p-sortIcon field="netSpread"></p-sortIcon></th>
+      <th pSortableColumn="profitPercent">Profit % <p-sortIcon field="profitPercent"></p-sortIcon></th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-row>
+    <tr>
+      <td class="item">{{ row.itemName }}</td>
+      <td>{{ row.sourceServer }}</td>
+      <td>{{ row.targetServer }}</td>
+      <td>{{ row.sourcePrice | price }}</td>
+      <td>{{ row.targetPrice | price }}</td>
+      <td>{{ row.netSpread | price }}</td>
+      <td>{{ row.profitPercent | percent: '1.1-1' }}</td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="7">No opportunities yet.</td>
+    </tr>
+  </ng-template>
+</p-table>
