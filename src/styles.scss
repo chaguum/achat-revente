@@ -84,8 +84,9 @@ body::after {
 
 .app-main {
   flex: 1;
-  width: min(1400px, 100%);
-  margin: 0 auto;
+  width: 100%;
+  max-width: none;
+  margin: 0;
   padding: 2rem clamp(2rem, 3vw, 3.5rem) 3.5rem;
 }
 
@@ -123,6 +124,80 @@ body::after {
 .p-datatable .p-datatable-header,
 .p-card {
   background: transparent;
+  color: var(--ink);
+}
+
+.p-overlaypanel,
+.p-dropdown-panel,
+.p-multiselect-panel,
+.p-autocomplete-panel,
+.p-select-overlay,
+.p-multiselect-overlay,
+.p-autocomplete-overlay,
+.p-datepicker,
+.p-datepicker-panel,
+.p-overlaypanel-content,
+.p-select-panel,
+.p-listbox,
+.p-menu,
+.p-tieredmenu {
+  background: #0f141c;
+  color: var(--ink);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+}
+
+.p-dialog,
+.p-dialog-header,
+.p-dialog-content,
+.p-dialog-footer {
+  background: #11161e;
+  color: var(--ink);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.p-overlaypanel .p-overlaypanel-content,
+.p-dropdown-panel .p-dropdown-items,
+.p-multiselect-panel .p-multiselect-items,
+.p-autocomplete-panel .p-autocomplete-items {
+  background: transparent;
+  color: inherit;
+}
+
+.p-datepicker .p-datepicker-header,
+.p-datepicker table th,
+.p-datepicker table td,
+.p-datepicker .p-datepicker-buttonbar {
+  color: var(--ink);
+}
+
+.p-datepicker table td > span {
+  color: var(--ink);
+}
+
+.p-datepicker table td > span:not(.p-disabled):hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.p-dropdown-item,
+.p-multiselect-item,
+.p-autocomplete-item,
+.p-select-option {
+  color: var(--ink);
+}
+
+.p-dropdown-item:not(.p-highlight):hover,
+.p-multiselect-item:not(.p-highlight):hover,
+.p-autocomplete-item:not(.p-highlight):hover,
+.p-select-option:not(.p-highlight):hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.p-dropdown-item.p-highlight,
+.p-multiselect-item.p-highlight,
+.p-autocomplete-item.p-highlight,
+.p-select-option.p-highlight {
+  background: rgba(255, 125, 59, 0.18);
   color: var(--ink);
 }
 

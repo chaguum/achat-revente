@@ -11,6 +11,18 @@
   </div>
 
   <div class="page-card p-4">
+    <div class="table-toolbar">
+      <p-multiselect
+        [options]="columnOptions"
+        [ngModel]="visibleColumns()"
+        (ngModelChange)="updateVisibleColumns($event)"
+        optionLabel="label"
+        optionValue="value"
+        display="chip"
+        placeholder="Colonnes visibles"
+        class="columns-select"
+      ></p-multiselect>
+    </div>
     <p-table
       [value]="openRows()"
       [paginator]="true"
@@ -22,7 +34,7 @@
     >
       <ng-template pTemplate="header">
         <tr>
-          <th pSortableColumn="operation.boughtAt">
+          <th *ngIf="isColumnVisible('boughtAt')" pSortableColumn="operation.boughtAt">
             Date achat
             <p-sortIcon field="operation.boughtAt"></p-sortIcon>
             <p-columnFilter
@@ -41,7 +53,7 @@
               </ng-template>
             </p-columnFilter>
           </th>
-          <th pSortableColumn="operation.server">
+          <th *ngIf="isColumnVisible('server')" pSortableColumn="operation.server">
             Serveur
             <p-sortIcon field="operation.server"></p-sortIcon>
             <p-columnFilter
@@ -65,7 +77,7 @@
               </ng-template>
             </p-columnFilter>
           </th>
-          <th pSortableColumn="operation.itemName">
+          <th *ngIf="isColumnVisible('itemName')" pSortableColumn="operation.itemName">
             Item
             <p-sortIcon field="operation.itemName"></p-sortIcon>
             <p-columnFilter
@@ -89,7 +101,7 @@
               </ng-template>
             </p-columnFilter>
           </th>
-          <th pSortableColumn="operation.acquisitionType">
+          <th *ngIf="isColumnVisible('acquisitionType')" pSortableColumn="operation.acquisitionType">
             Type
             <p-sortIcon field="operation.acquisitionType"></p-sortIcon>
             <p-columnFilter
@@ -112,7 +124,7 @@
               </ng-template>
             </p-columnFilter>
           </th>
-          <th pSortableColumn="operation.buyPrice">
+          <th *ngIf="isColumnVisible('buyPrice')" pSortableColumn="operation.buyPrice">
             Prix achat
             <p-sortIcon field="operation.buyPrice"></p-sortIcon>
             <p-columnFilter
@@ -136,7 +148,7 @@
               </ng-template>
             </p-columnFilter>
           </th>
-          <th pSortableColumn="operation.sellPrice">
+          <th *ngIf="isColumnVisible('sellPrice')" pSortableColumn="operation.sellPrice">
             Prix cible
             <p-sortIcon field="operation.sellPrice"></p-sortIcon>
             <p-columnFilter
@@ -160,11 +172,11 @@
               </ng-template>
             </p-columnFilter>
           </th>
-          <th>Profit attendu</th>
-          <th>Marge attendue</th>
-          <th>Commentaire</th>
-          <th pSortableColumn="metrics.daysOnMarket">
-            Jours en vente
+          <th *ngIf="isColumnVisible('expectedProfit')">Profit attendu</th>
+          <th *ngIf="isColumnVisible('expectedMargin')">Marge attendue</th>
+          <th *ngIf="isColumnVisible('comment')">Commentaire</th>
+          <th *ngIf="isColumnVisible('daysOnMarket')" pSortableColumn="metrics.daysOnMarket">
+            En vente depuis
             <p-sortIcon field="metrics.daysOnMarket"></p-sortIcon>
           </th>
           <th>Actions</th>
@@ -172,55 +184,154 @@
       </ng-template>
       <ng-template pTemplate="body" let-row>
         <tr>
-          <td>{{ row.operation.boughtAt | date: 'dd/MM/yyyy' }}</td>
-          <td>{{ row.operation.server }}</td>
-          <td>{{ row.operation.itemName }}</td>
-          <td>
+          <td *ngIf="isColumnVisible('boughtAt')">{{ row.operation.boughtAt | date: 'dd/MM/yyyy' }}</td>
+          <td *ngIf="isColumnVisible('server')">{{ row.operation.server }}</td>
+          <td *ngIf="isColumnVisible('itemName')">{{ row.operation.itemName }}</td>
+          <td *ngIf="isColumnVisible('acquisitionType')">
             <p-tag
               [value]="formatAcquisitionLabel(row.operation.acquisitionType)"
               [severity]="row.operation.acquisitionType === 'BUY' ? 'info' : 'warn'"
             ></p-tag>
           </td>
-          <td>{{ row.operation.buyPrice | kamas }}</td>
-          <td>
+          <td *ngIf="isColumnVisible('buyPrice')">{{ row.operation.buyPrice | kamas }}</td>
+          <td *ngIf="isColumnVisible('sellPrice')">
             {{ row.operation.sellPrice !== null && row.operation.sellPrice !== undefined ? (row.operation.sellPrice | kamas) : '-' }}
           </td>
-          <td>
+          <td *ngIf="isColumnVisible('expectedProfit')">
             <span *ngIf="row.metrics.expectedProfit !== null; else noProfit">
               {{ row.metrics.expectedProfit | kamas }}
             </span>
             <ng-template #noProfit>-</ng-template>
           </td>
-          <td>
+          <td *ngIf="isColumnVisible('expectedMargin')">
             <span *ngIf="row.metrics.expectedMargin !== null; else noMargin">
               {{ row.metrics.expectedMargin | percent: '1.0-1' }}
             </span>
             <ng-template #noMargin>-</ng-template>
           </td>
-          <td>{{ row.operation.comment || '-' }}</td>
-          <td>{{ row.metrics.daysOnMarket | number: '1.0-1' }}</td>
+          <td *ngIf="isColumnVisible('comment')">{{ row.operation.comment || '-' }}</td>
+          <td *ngIf="isColumnVisible('daysOnMarket')">
+            {{ row.operation.boughtAt | date: 'dd/MM/yyyy' }}
+            ({{ row.metrics.daysOnMarket | number: '1.0-1' }} j)
+          </td>
           <td class="actions-cell">
-            <button
-              pButton
-              type="button"
-              icon="pi pi-check"
-              class="p-button-sm"
-              label="Valider"
-              (click)="openSaleDialog(row.operation)"
-            ></button>
-            <button
-              pButton
-              type="button"
-              icon="pi pi-trash"
-              class="p-button-text p-button-sm"
-              (click)="deleteOperation(row.operation)"
-            ></button>
+            <div class="actions-row">
+              <button
+                pButton
+                type="button"
+                icon="pi pi-check"
+                class="p-button-sm"
+                label="Valider"
+                (click)="openSaleDialog(row.operation)"
+              ></button>
+              <button
+                pButton
+                type="button"
+                icon="pi pi-pencil"
+                class="p-button-text p-button-sm"
+                label="Modifier"
+                (click)="openEdit(row.operation)"
+              ></button>
+              <button
+                pButton
+                type="button"
+                icon="pi pi-trash"
+                class="p-button-text p-button-sm"
+                (click)="deleteOperation(row.operation)"
+              ></button>
+            </div>
           </td>
         </tr>
       </ng-template>
     </p-table>
   </div>
 </section>
+
+<p-dialog
+  header="Modifier l'operation"
+  [modal]="true"
+  [style]="{ width: 'min(620px, 92vw)' }"
+  [visible]="editDialogOpen()"
+  (onHide)="closeEdit()"
+>
+  <ng-container *ngIf="selectedOperation() as operation">
+    <div class="dialog-summary">
+      <div>
+        <div class="summary-title">{{ operation.itemName }}</div>
+        <div class="summary-sub">{{ operation.server }} ? {{ formatAcquisitionLabel(operation.acquisitionType) }}</div>
+      </div>
+    </div>
+    <div class="dialog-grid">
+      <div class="field">
+        <label>Serveur</label>
+        <p-select
+          [options]="store.servers()"
+          optionLabel="name"
+          optionValue="name"
+          [ngModel]="editDraft().server"
+          (ngModelChange)="updateEditDraft({ server: $event })"
+        ></p-select>
+      </div>
+      <div class="field">
+        <label>Item</label>
+        <p-autoComplete
+          [suggestions]="filteredItems()"
+          [ngModel]="editDraft().itemName"
+          (ngModelChange)="updateEditDraft({ itemName: $event })"
+          (completeMethod)="filterItemNames($event)"
+        ></p-autoComplete>
+      </div>
+      <div class="field">
+        <label>Type</label>
+        <p-select
+          [options]="acquisitionOptions"
+          optionLabel="label"
+          optionValue="value"
+          [ngModel]="editDraft().acquisitionType"
+          (ngModelChange)="updateEditDraft({ acquisitionType: $event })"
+        ></p-select>
+      </div>
+      <div class="field">
+        <label>Date achat</label>
+        <p-datepicker
+          [showIcon]="true"
+          [ngModel]="editDraft().boughtAt"
+          (ngModelChange)="updateEditDraft({ boughtAt: $event })"
+        ></p-datepicker>
+      </div>
+      <div class="field">
+        <label>Prix achat</label>
+        <p-inputNumber
+          [min]="0"
+          [ngModel]="editDraft().buyPrice"
+          (ngModelChange)="updateEditDraft({ buyPrice: $event })"
+        ></p-inputNumber>
+      </div>
+      <div class="field">
+        <label>Prix cible</label>
+        <p-inputNumber
+          [min]="0"
+          [ngModel]="editDraft().sellPrice"
+          (ngModelChange)="updateEditDraft({ sellPrice: $event })"
+        ></p-inputNumber>
+      </div>
+      <div class="field">
+        <label>Commentaire</label>
+        <input
+          pInputText
+          type="text"
+          [ngModel]="editDraft().comment"
+          (ngModelChange)="updateEditDraft({ comment: $event })"
+        />
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template pTemplate="footer">
+    <button pButton type="button" label="Annuler" class="p-button-text" (click)="closeEdit()"></button>
+    <button pButton type="button" label="Enregistrer" [disabled]="!canSaveEdit()" (click)="saveEdit()"></button>
+  </ng-template>
+</p-dialog>
 
 <p-dialog
   header="Ajout rapide"
@@ -311,7 +422,7 @@
 <p-dialog
   header="Valider la vente"
   [modal]="true"
-  [style]="{ width: 'min(520px, 92vw)' }"
+  [style]="{ width: 'min(640px, 92vw)' }"
   [visible]="saleDialogOpen()"
   (onHide)="closeSaleDialog()"
 >

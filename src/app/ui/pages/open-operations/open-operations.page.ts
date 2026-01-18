@@ -41,6 +41,28 @@ interface SaleDraft {
   comment: string;
 }
 
+type ColumnKey =
+  | 'boughtAt'
+  | 'server'
+  | 'itemName'
+  | 'acquisitionType'
+  | 'buyPrice'
+  | 'sellPrice'
+  | 'expectedProfit'
+  | 'expectedMargin'
+  | 'comment'
+  | 'daysOnMarket';
+
+interface EditDraft {
+  server: string;
+  itemName: string;
+  acquisitionType: AcquisitionType;
+  buyPrice: number | null;
+  boughtAt: Date;
+  sellPrice: number | null;
+  comment: string;
+}
+
 @Component({
   selector: 'app-open-operations-page',
   standalone: true,
@@ -67,6 +89,7 @@ interface SaleDraft {
   styleUrl: './open-operations.page.scss'
 })
 export class OpenOperationsPageComponent implements OnInit {
+  private readonly storageKey = 'open-operations.visibleColumns';
   private readonly feePolicy = new DefaultFeePolicy();
 
   readonly store = inject(OpenOperationsStore);
@@ -75,6 +98,7 @@ export class OpenOperationsPageComponent implements OnInit {
 
   readonly quickAddOpen = signal(false);
   readonly saleDialogOpen = signal(false);
+  readonly editDialogOpen = signal(false);
 
   readonly filteredItems = signal<string[]>([]);
 
@@ -94,6 +118,31 @@ export class OpenOperationsPageComponent implements OnInit {
     priceModified: false,
     comment: ''
   });
+
+  readonly editDraft = signal<EditDraft>({
+    server: '',
+    itemName: '',
+    acquisitionType: 'BUY',
+    buyPrice: null,
+    boughtAt: new Date(),
+    sellPrice: null,
+    comment: ''
+  });
+
+  readonly columnOptions: Array<{ label: string; value: ColumnKey }> = [
+    { label: 'Date achat', value: 'boughtAt' },
+    { label: 'Serveur', value: 'server' },
+    { label: 'Item', value: 'itemName' },
+    { label: 'Type', value: 'acquisitionType' },
+    { label: 'Prix achat', value: 'buyPrice' },
+    { label: 'Prix cible', value: 'sellPrice' },
+    { label: 'Profit attendu', value: 'expectedProfit' },
+    { label: 'Marge attendue', value: 'expectedMargin' },
+    { label: 'Commentaire', value: 'comment' },
+    { label: 'En vente depuis', value: 'daysOnMarket' }
+  ];
+
+  readonly visibleColumns = signal<ColumnKey[]>(this.loadVisibleColumns());
 
   readonly acquisitionOptions: Array<{ label: string; value: AcquisitionType }> = [
     { label: 'Achat', value: 'BUY' },
@@ -175,6 +224,11 @@ export class OpenOperationsPageComponent implements OnInit {
     return draft.sellPrice !== null && draft.sellPrice >= 0;
   });
 
+  readonly canSaveEdit = computed(() => {
+    const draft = this.editDraft();
+    return Boolean(draft.server && draft.itemName.trim()) && (draft.buyPrice ?? -1) >= 0;
+  });
+
   ngOnInit(): void {
     this.store.load();
   }
@@ -247,6 +301,10 @@ export class OpenOperationsPageComponent implements OnInit {
     this.saleDraft.update((state) => ({ ...state, ...patch }));
   }
 
+  updateEditDraft(patch: Partial<EditDraft>): void {
+    this.editDraft.update((state) => ({ ...state, ...patch }));
+  }
+
   filterItemNames(event: { query: string }): void {
     const query = event.query.toLowerCase();
     const filtered = this.store
@@ -304,6 +362,48 @@ export class OpenOperationsPageComponent implements OnInit {
     this.selectedOperation.set(null);
   }
 
+  openEdit(operation: TradeOperation): void {
+    this.selectedOperation.set(operation);
+    this.editDraft.set({
+      server: operation.server,
+      itemName: operation.itemName,
+      acquisitionType: operation.acquisitionType,
+      buyPrice: operation.buyPrice,
+      boughtAt: operation.boughtAt,
+      sellPrice: operation.sellPrice ?? null,
+      comment: operation.comment ?? ''
+    });
+    this.filteredItems.set(this.store.itemNames());
+    this.editDialogOpen.set(true);
+  }
+
+  closeEdit(): void {
+    this.editDialogOpen.set(false);
+    this.selectedOperation.set(null);
+  }
+
+  async saveEdit(): Promise<void> {
+    const selected = this.selectedOperation();
+    const draft = this.editDraft();
+    if (!selected?.id || !this.canSaveEdit()) {
+      return;
+    }
+    const updated: TradeOperation = {
+      ...selected,
+      server: draft.server,
+      itemName: draft.itemName.trim(),
+      acquisitionType: draft.acquisitionType,
+      buyPrice: draft.buyPrice ?? 0,
+      boughtAt: draft.boughtAt,
+      sellPrice: draft.sellPrice,
+      comment: draft.comment.trim() ? draft.comment.trim() : undefined,
+      status: 'OPEN',
+      soldAt: null
+    };
+    await this.store.updateOperation(updated);
+    this.closeEdit();
+  }
+
   async confirmSale(): Promise<void> {
     const selected = this.selectedOperation();
     const draft = this.saleDraft();
@@ -320,5 +420,47 @@ export class OpenOperationsPageComponent implements OnInit {
     await this.soldStore.load();
     await this.analyticsStore.load();
     this.closeSaleDialog();
+  }
+
+  updateVisibleColumns(values: ColumnKey[] | null): void {
+    const selected = values ?? [];
+    const ordered = this.columnOptions
+      .map((option) => option.value)
+      .filter((value) => selected.includes(value));
+    this.visibleColumns.set(ordered.length ? ordered : this.defaultColumns());
+    this.persistVisibleColumns(this.visibleColumns());
+  }
+
+  isColumnVisible(column: ColumnKey): boolean {
+    return this.visibleColumns().includes(column);
+  }
+
+  private defaultColumns(): ColumnKey[] {
+    return this.columnOptions.map((option) => option.value);
+  }
+
+  private loadVisibleColumns(): ColumnKey[] {
+    if (typeof localStorage === 'undefined') {
+      return this.defaultColumns();
+    }
+    const raw = localStorage.getItem(this.storageKey);
+    if (!raw) {
+      return this.defaultColumns();
+    }
+    try {
+      const parsed = JSON.parse(raw) as ColumnKey[];
+      const allowed = new Set(this.columnOptions.map((option) => option.value));
+      const filtered = parsed.filter((value) => allowed.has(value));
+      return filtered.length ? filtered : this.defaultColumns();
+    } catch {
+      return this.defaultColumns();
+    }
+  }
+
+  private persistVisibleColumns(columns: ColumnKey[]): void {
+    if (typeof localStorage === 'undefined') {
+      return;
+    }
+    localStorage.setItem(this.storageKey, JSON.stringify(columns));
   }
 }

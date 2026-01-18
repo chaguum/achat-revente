@@ -81,11 +81,22 @@ export const OpenOperationsStore = signalStore(
       }
     };
 
+    const updateOperation = async (operation: TradeOperation) => {
+      patchState(store, { loading: true, error: null });
+      try {
+        await operationsUseCases.updateOperation(operation);
+        await load();
+      } catch (error) {
+        patchState(store, { loading: false, error: (error as Error).message });
+      }
+    };
+
     return {
       load,
       addOperations,
       deleteOperation,
-      validateSale
+      validateSale,
+      updateOperation
     };
   })
 );

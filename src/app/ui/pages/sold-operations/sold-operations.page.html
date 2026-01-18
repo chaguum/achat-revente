@@ -204,8 +204,10 @@
           <td>{{ row.metrics.margin !== null ? (row.metrics.margin | percent: '1.0-1') : '-' }}</td>
           <td>{{ row.metrics.daysOnMarket | number: '1.0-1' }}</td>
           <td class="actions-cell">
-            <button pButton type="button" icon="pi pi-pencil" class="p-button-text p-button-sm" (click)="openEdit(row.operation)"></button>
-            <button pButton type="button" icon="pi pi-trash" class="p-button-text p-button-sm" (click)="deleteOperation(row.operation)"></button>
+            <div class="actions-row">
+              <button pButton type="button" icon="pi pi-pencil" class="p-button-text p-button-sm" (click)="openEdit(row.operation)"></button>
+              <button pButton type="button" icon="pi pi-trash" class="p-button-text p-button-sm" (click)="deleteOperation(row.operation)"></button>
+            </div>
           </td>
         </tr>
       </ng-template>

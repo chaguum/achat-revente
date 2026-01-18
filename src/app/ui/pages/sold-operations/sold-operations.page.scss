@@ -22,8 +22,14 @@
 }
 
 .actions-cell {
-  display: flex;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.actions-row {
+  display: inline-flex;
   gap: 0.5rem;
+  align-items: center;
 }
 
 .dialog-summary {

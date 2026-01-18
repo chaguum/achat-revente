@@ -21,8 +21,23 @@
   flex-wrap: wrap;
 }
 
-.actions-cell {
+.table-toolbar {
   display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
+.columns-select {
+  min-width: 260px;
+}
+
+.actions-cell {
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.actions-row {
+  display: inline-flex;
   gap: 0.5rem;
   align-items: center;
 }
